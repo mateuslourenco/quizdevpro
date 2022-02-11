@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from quiz.base.models import Pergunta, Aluno
+from quiz.base.models import Pergunta, Aluno, Resposta
 
 
 @admin.register(Aluno)
@@ -11,3 +11,8 @@ class AlunoAdmin(admin.ModelAdmin):
 @admin.register(Pergunta)
 class PerguntaAdmin(admin.ModelAdmin):
     list_display = ('id', 'enunciado', 'disponivel',)
+
+
+@admin.register(Resposta)
+class RespostaAdmin(admin.ModelAdmin):
+    list_display = ('respondida_em', 'aluno', 'pergunta', 'pontos')
