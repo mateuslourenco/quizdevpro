@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils.timezone import now
 
 from quiz.base.forms import AlunoForm
 from quiz.base.models import Pergunta, Aluno, Resposta
@@ -49,8 +50,18 @@ def perguntas(request, indice):
                 resposta_indice = int(request.POST['resposta_indice'])
                 if resposta_indice == pergunta.alternativa_correta:
                     # Armazenar dados da resposta
-                    Resposta(aluno_id=aluno_id, pergunta=pergunta, pontos=PONTUACAO_MAXIMA).save()
-                    return redirect(f'/perguntas/{indice+1}')
+                    try:
+                        data_da_primeira_resposta = Resposta.objects.filter(
+                            pergunta=pergunta).order_by(
+                            'respondida_em')[0].respondida_em
+                    except IndexError:
+                        Resposta(aluno_id=aluno_id, pergunta=pergunta, pontos=PONTUACAO_MAXIMA).save()
+                    else:
+                        diferenca = now() - data_da_primeira_resposta
+                        diferenca_em_segundos = int(diferenca.total_seconds())
+                        pontos = max(PONTUACAO_MAXIMA - diferenca_em_segundos, 10)
+                        Resposta(aluno_id=aluno_id, pergunta=pergunta, pontos=pontos).save()
+                    return redirect(f'/perguntas/{indice + 1}')
                 else:
                     ctx['resposta_indice'] = resposta_indice
             return render(request, 'base/game.html', context=ctx)
