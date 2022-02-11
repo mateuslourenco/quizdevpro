@@ -1,9 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from quiz.base.models import Pergunta
+from quiz.base.forms import AlunoForm
+from quiz.base.models import Pergunta, Aluno
 
 
 def home(request):
+    if request.method == 'POST':
+        # Usuário já existe
+        email = request.POST['email']
+        try:
+            aluno = Aluno.objects.get(email=email)
+        except Aluno.DoesNotExist:
+            # Usuário não existe
+            formulario = AlunoForm(request.POST)
+            if formulario.is_valid():
+                aluno = formulario.save()
+                request.session['aluno_id'] = aluno.id
+                return redirect('/perguntas/1')
+            else:
+                ctx = {'formulario': formulario}
+                return render(request, 'base/home.html', context=ctx)
+        else:
+            request.session['aluno_id'] = aluno.id
+            return redirect('/perguntas/1')
     return render(request, 'base/home.html')
 
 
