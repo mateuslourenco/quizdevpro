@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.utils.timezone import now
@@ -78,7 +79,10 @@ def perguntas(request, indice):
                         diferenca = now() - data_da_primeira_resposta
                         diferenca_em_segundos = int(diferenca.total_seconds())
                         pontos = max(PONTUACAO_MAXIMA - diferenca_em_segundos, 10)
-                        Resposta(aluno_id=aluno_id, pergunta=pergunta, pontos=pontos).save()
+                        try:
+                            Resposta(aluno_id=aluno_id, pergunta=pergunta, pontos=pontos).save()
+                        except IntegrityError:
+                            return redirect(f'/perguntas/{indice + 1}')
                     return redirect(f'/perguntas/{indice + 1}')
                 else:
                     ctx['resposta_indice'] = resposta_indice
