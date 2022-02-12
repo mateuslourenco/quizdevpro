@@ -8,6 +8,7 @@ django = "*"
 gunicorn = "*"
 python-decouple = "*"
 whitenoise = "*"
+dj-database-url = "*"
 
 [dev-packages]
 flake8 = "*"
