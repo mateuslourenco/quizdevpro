@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from quiz.base import views
 
@@ -24,3 +25,8 @@ urlpatterns = [
     path('perguntas/<int:indice>', views.perguntas),
     path('classificacao', views.classificacao),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(
+        path('__debug__/', include('debug_toolbar.urls')),
+    )
