@@ -10,6 +10,7 @@ python-decouple = "*"
 whitenoise = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 flake8 = "*"
