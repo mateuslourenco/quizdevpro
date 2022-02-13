@@ -11,6 +11,7 @@ whitenoise = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
 django-debug-toolbar = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 flake8 = "*"
