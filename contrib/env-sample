@@ -1,5 +1,5 @@
 DEBUG=True
 SECRET_KEY=CHAVE SECRETA
-DATABASE_URL=postgres://postgres:postgres@localhost/postgres:5434/cursodjango_database
+DATABASE_URL=postgres://postgres:postgres@localhost/postgres
 INTERNAL_IPS=127.0.0.1
 SENTRY_DSN=
