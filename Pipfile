@@ -18,6 +18,7 @@ pytest-django = "*"
 django-debug-toolbar = "*"
 pytest-cov = "*"
 codecov = "*"
+model-mommy = "*"
 
 [requires]
 python_version = "3.9"
