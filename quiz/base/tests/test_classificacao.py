@@ -2,7 +2,7 @@ import pytest
 from django.db.models import Sum
 from django.urls import reverse
 
-from quiz.base.models import Aluno, Pergunta, Resposta
+from quiz.base.models import Pergunta, Resposta
 from quiz.django_assertions import assert_contains
 
 
