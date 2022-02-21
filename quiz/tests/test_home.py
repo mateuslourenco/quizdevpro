@@ -28,3 +28,26 @@ def resp_post(client, aluno):
 def test_aluno_existente_redirect(resp_post):
     assert resp_post.status_code == 302
     assert resp_post.url == '/perguntas/1'
+
+
+@pytest.fixture
+def resp_post_aluno_inexistente(client):
+    return client.post(reverse('home'), {'nome': 'novo', 'email': 'novo@novo.com'})
+
+
+def test_aluno_novo_redirect(db, resp_post_aluno_inexistente):
+    assert resp_post_aluno_inexistente.status_code == 302
+    assert resp_post_aluno_inexistente.url == '/perguntas/1'
+
+
+def test_aluno_novo_existe_no_db(db, resp_post_aluno_inexistente):
+    assert Aluno.objects.exists()
+
+
+@pytest.fixture
+def resp_dado_invalido(client):
+    return client.post(reverse('home'), {'nome': '', 'email': ''})
+
+
+def test_aluno_nao_existe_no_db(db, resp_dado_invalido):
+    assert not Aluno.objects.exists()
