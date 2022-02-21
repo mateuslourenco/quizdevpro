@@ -11,11 +11,13 @@ whitenoise = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
 sentry-sdk = "*"
+codecov = "*"
 
 [dev-packages]
 flake8 = "*"
 pytest-django = "*"
 django-debug-toolbar = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"
