@@ -45,9 +45,9 @@ def test_aluno_novo_existe_no_db(db, resp_post_aluno_inexistente):
 
 
 @pytest.fixture
-def resp_dado_invalido(client):
+def resp_dados_invalido(client):
     return client.post(reverse('home'), {'nome': '', 'email': ''})
 
 
-def test_aluno_nao_existe_no_db(db, resp_dado_invalido):
+def test_aluno_nao_existe_no_db(db, resp_dados_invalido):
     assert not Aluno.objects.exists()
