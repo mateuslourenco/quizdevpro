@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from model_mommy import mommy
+from model_bakery import baker
 
 from quiz.base.models import Aluno
 
@@ -16,7 +16,7 @@ def test_status_code(resp):
 
 @pytest.fixture
 def aluno(db):
-    aluno_modelo = mommy.make(Aluno)
+    aluno_modelo = baker.make(Aluno)
     return aluno_modelo
 
 
