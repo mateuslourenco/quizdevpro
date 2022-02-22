@@ -52,4 +52,3 @@ def test_enunciado_presente(resp_com_aluno_logado, pergunta):
 def test_alternativas_presentes(resp_com_aluno_logado, pergunta):
     for alternativa in pergunta.alternativas['array']:
         assert_contains(resp_com_aluno_logado, alternativa)
-
