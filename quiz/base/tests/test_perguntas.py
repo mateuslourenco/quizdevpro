@@ -1,9 +1,11 @@
 import pytest
 from django.urls import reverse
 
+from quiz.django_assertions import assert_contains
+
 
 @pytest.fixture
-def client_com_aluno_logado_perguntas(aluno, client):
+def client_com_aluno_logado(aluno, client):
     session = client.session
     session['aluno_id'] = aluno.id
     session.save()
@@ -16,18 +18,13 @@ def resp_sem_aluno(client):
 
 
 @pytest.fixture
-def resp_com_aluno_logado(client_com_aluno_logado_perguntas, pergunta):
-    return client_com_aluno_logado_perguntas.get(reverse('perguntas', kwargs={'indice': 1}))
+def resp_com_aluno_logado(client_com_aluno_logado, pergunta):
+    return client_com_aluno_logado.get(reverse('perguntas', kwargs={'indice': 1}))
 
 
 @pytest.fixture
-def resp_indice_pergunta_invalido(client_com_aluno_logado, pergunta):
+def resp_indice_perguntas_finalizado(client_com_aluno_logado, pergunta):
     return client_com_aluno_logado.get(reverse('perguntas', kwargs={'indice': pergunta.id + 1}))
-
-
-@pytest.fixture
-def resp_post(client_com_aluno_logado, pergunta, resposta):
-    return client_com_aluno_logado
 
 
 def test_status_code_sem_aluno(resp_sem_aluno):
@@ -39,6 +36,20 @@ def test_status_code_com_aluno(resp_com_aluno_logado):
     assert resp_com_aluno_logado.status_code == 200
 
 
-def test_status_code_indice_invalido(resp_indice_pergunta_invalido, pergunta, resposta):
-    assert resp_indice_pergunta_invalido.status_code == 302
-    assert resp_indice_pergunta_invalido.url == reverse('classificacao')
+def test_status_code_redirect_classificacao(resp_indice_perguntas_finalizado, pergunta, resposta):
+    assert resp_indice_perguntas_finalizado.status_code == 302
+    assert resp_indice_perguntas_finalizado.url == reverse('classificacao')
+
+
+def test_id_da_pergunta_presente(resp_com_aluno_logado, pergunta):
+    assert_contains(resp_com_aluno_logado, pergunta.id)
+
+
+def test_enunciado_presente(resp_com_aluno_logado, pergunta):
+    assert_contains(resp_com_aluno_logado, pergunta.enunciado)
+
+
+def test_alternativas_presentes(resp_com_aluno_logado, pergunta):
+    for alternativa in pergunta.alternativas['array']:
+        assert_contains(resp_com_aluno_logado, alternativa)
+
